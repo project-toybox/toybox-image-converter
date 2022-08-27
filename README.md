@@ -26,5 +26,17 @@ dotnet publish Toybox.ICS\Toybox.ICS.csproj /p:PublishProfile=Toybox.ICS\Propert
 ## Usage
 [View the documentation](README.md) for usage information.
 
+## Structure
+```
+Server
+┣━ settings
+   ┣━ avif
+   ┣━ jpegxl
+   ┗━ png
+┣━ convert
+┣━ error.html
+┗━ index.html
+```
+
 ## License
 The contents are available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
