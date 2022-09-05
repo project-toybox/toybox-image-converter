@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BitFaster.Caching" Version="2.0.0" />
+    <PackageReference Include="NetVips" Version="2.2.0" />
+    <PackageReference Include="NetVips.Native.win-x64" Version="8.13.1" />
+    <PackageReference Include="NetVips.Native.win-x86" Version="8.13.1" />
+  </ItemGroup>
+
 </Project>
