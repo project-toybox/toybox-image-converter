@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	//"ics/cache"
-	"ics/fs"
+	//"ics/fs"
 	"ics/options"
 	//"ics/vips"
 )
