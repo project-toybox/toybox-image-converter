@@ -13,7 +13,7 @@
 
 ## Structure
 ```
-Server
+<ICS>
 ┣━ get
 ┣━ save
 ┣━ error.html
