@@ -11,13 +11,14 @@
     <br>
 </p>
 
-## Structure
+## Map
 ```
-<ICS>
-┣━ get
-┣━ save
-┣━ error.html
-┗━ index.html
+Image Conversion Server
+┣━ cache
+┣━ convert
+┣━ error
+┣━ index
+┗━ log
 ```
 
 ## Usage
