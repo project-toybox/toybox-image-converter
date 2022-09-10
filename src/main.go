@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ics/src/utils"
+	"ics/utils"
 	"fmt"
 )
 
