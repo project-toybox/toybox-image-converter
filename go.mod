@@ -1,3 +1,3 @@
-module toybox_imange_conversion_server
+module ics
 
 go 1.19
