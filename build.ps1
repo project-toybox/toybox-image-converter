@@ -6,6 +6,8 @@ write-host "----------------------------------------"
 
 try
 {
+    $oldLocation = Get-Location
+
     $fullPathOfCurrentScript = $MyInvocation.MyCommand.Definition # Full path of the script file.
     $fileNameOfCurrentScript = $MyInvocation.MyCommand.Name # Name of the script file.
     $currentPath = $fullPathOfCurrentScript.Replace($fileNameOfCurrentScript, "") # Current executing path.
@@ -44,7 +46,7 @@ try
     # ----------------------------------------------------------------------
 
     # Done.
-    Set-Location $currentPath
+    Set-Location $oldLocation
 
     $env:GOOS = $GOOS_OLD
     $env:GOARCH = $GOARCH_OLD
