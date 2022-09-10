@@ -12,16 +12,16 @@
 </p>
 
 ## Build
-1. Open a '__Developer PowerShell for VS 2022__' from the solution root.
-2. Run this command.
-```
-[x86]
-dotnet publish Toybox.ICS\Toybox.ICS.csproj /p:PublishProfile=Toybox.ICS\Properties\PublishProfiles\x86.pubxml
 
-[x64]
-dotnet publish Toybox.ICS\Toybox.ICS.csproj /p:PublishProfile=Toybox.ICS\Properties\PublishProfiles\x64.pubxml
-```
-3. A built application will be stored in '__/Toybox.ICS/bin/publish__'.
+### Requirements
+ * __OS__ : Windows 10 or higher version(include server edtions)
+ * __Tools__ : [PowerShell(v7 or higher version)](https://github.com/PowerShell/PowerShell), [Go SDK(v1.19 or higher version)](https://go.dev/dl/)
+
+### Guide
+1. Open a PowerShell terminal from the repository root.
+2. Run this command: `./build.ps1`
+
+3. The compiled program will be stored in `./dist/`.
 
 ## Usage
 [View the documentation](README.md) for usage information.
