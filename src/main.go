@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	//"ics/cache"
+	"ics/fs"
 	"ics/options"
 	//"ics/vips"
 )
@@ -20,4 +21,5 @@ func main() {
 	}
 
 	fmt.Printf(options.ConversionFormat);
+
 }

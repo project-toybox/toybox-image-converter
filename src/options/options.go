@@ -20,7 +20,7 @@ func newOptions() *options {
 
 	opt.UseCaching = true;
 	opt.CacheDuration = 10;
-	
+
 	opt.UsePreloading = false;
 	opt.ItemsToPreload = []string{};
 
