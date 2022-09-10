@@ -11,6 +11,18 @@
     <br>
 </p>
 
+## Structure
+```
+Server
+┣━ get
+┣━ save
+┣━ error.html
+┗━ index.html
+```
+
+## Usage
+[View the documentation](README.md) for usage information.
+
 ## Build
 
 ### Requirements
@@ -22,21 +34,6 @@
 2. Run this command: `./build.ps1`
 
 3. The compiled program will be stored in `./dist/`.
-
-## Usage
-[View the documentation](README.md) for usage information.
-
-## Structure
-```
-Server
-┣━ settings
-   ┣━ avif
-   ┣━ jpegxl
-   ┗━ png
-┣━ convert
-┣━ error.html
-┗━ index.html
-```
 
 ## License
 The contents are available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
