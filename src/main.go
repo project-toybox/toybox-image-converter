@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	//"ics/cache"
-	//"ics/fs"
 	"ics/options"
-	//"ics/vips"
+	"ics/server"
 )
 
 func main() {
@@ -21,13 +19,18 @@ func main() {
 	fmt.Println("Copyright (c) 2022 Project Toybox all rights reserved.");
 
 	// Get CLI args.
-	options, err := options.ParseArguments();
+	opt, opt_err := options.ParseArguments();
 
-	if (err != nil) {
-		fmt.Println(err);
+	if (opt_err != nil) {
+		fmt.Println(opt_err);
 		return;
 	}
 
-	fmt.Printf(options.ConversionFormat);
+	// Open a server.
+	serv_err := server.Open(opt);
 
+	if (serv_err != nil) {
+		fmt.Println(serv_err);
+		return;
+	}
 }

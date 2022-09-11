@@ -21,8 +21,8 @@ var cliArguments struct {
 	ItemsToPreload string `long:"items-to-preload" description:"Set paths(absoulte path) to be preloaded. Each item is separated by '|(Vertical Bar)' letter."`;
 }
 
-func ParseArguments() (*options, error) {
-	var resultOptions *options = newOptions();
+func ParseArguments() (*Options, error) {
+	var resultOptions *Options = newOptions();
 	var resultError error = nil;
 
 	// Parse CLI Arguments

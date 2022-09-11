@@ -1,6 +1,6 @@
 package options
 
-type options struct {
+type Options struct {
 	Port int;
 	ConversionFormat string;
 	ConversionOptions map[string]string;
@@ -12,8 +12,8 @@ type options struct {
 	ItemsToPreload []string;
 }
 
-func newOptions() *options {
-	opt := options{};
+func newOptions() *Options {
+	opt := Options{};
 	opt.Port = 49696;
 	opt.ConversionFormat = "png";
 	opt.ConversionOptions = make(map[string]string);
