@@ -7,7 +7,7 @@
         <img src="https://raw.githubusercontent.com/project-toybox/toybox-assets/main/images/toybox-icon.png" width="50" height="50">
         <p>Toybox Image Conversion Server</p>
     </h1>
-    <p align="center">A server application that provides image conversion APIs to Toybox components.<br>Available with REST API and IPC.</p>
+    <p align="center">A server application that provides image conversion APIs to Toybox components.<br>Available with IPC and REST API.</p>
     <br>
 </p>
 
