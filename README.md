@@ -26,16 +26,23 @@ Image Conversion Server
 [View the documentation](README.md) for usage information.
 
 ## Build
-The application is built with such options: Ready-to-Run and Platform-specific.
-
 ### Requirements
  * __OS__ : Windows 10 or higher version(include server edtions)
  * __Tools__ : [PowerShell(v7 or higher version)](https://github.com/PowerShell/PowerShell), [.NET SDK(v6.0 or higher version)](https://dotnet.microsoft.com/en-us/download)
 
+### Options
+The application is built with such options.
+ * Configuration : Release
+ * RuntimeIdentifier(RID) : win-x86, win-x64
+ * TargetFramework : net6.0
+ * SelfContained : true
+ * PublishSingleFile : false
+ * PublishReadyToRun : true
+ * PublishTrimmed : true
+
 ### Guide
 1. Open a PowerShell terminal from the repository root.
-2. Run this command: `./build.ps1`
-
+2. Run this command with administrator privilege: `./build.ps1`
 3. The compiled program will be stored in `./dist/`.
 
 ## License
