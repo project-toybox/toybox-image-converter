@@ -11,15 +11,15 @@
     <br>
 </p>
 
-## Map
+## Structure
 ```
 Image Conversion Server
-┣━ api
-   ┣━ cache
-   ┣━ convert
-   ┗━ log
-┣━ error
-┗━ index
+┣━ /api
+   ┣━ /cache
+   ┣━ /convert
+   ┗━ /log
+┣━ /error
+┗━ /index
 ```
 
 ## Usage
