@@ -17,11 +17,15 @@ try
 	# PATHS
     $fullPathOfCurrentScript = $MyInvocation.MyCommand.Definition # Full path of the script file.
     $fileNameOfCurrentScript = $MyInvocation.MyCommand.Name # Name of the script file.
+	
     $repositoryPath = $fullPathOfCurrentScript.Replace($fileNameOfCurrentScript, "") # Current executing path.
 	$srcPath = Join-Path $repositoryPath "src\"
 	$projectPath = Join-Path $repositoryPath "src\ToyboxICS\ToyboxICS.csproj"
+	$versionPath = Join-Path $repositoryPath "VERSION"
+	
 	$x86BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x86\*"
 	$x64BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x64\*"
+	
 	$distPath = Join-Path $repositoryPath "dist\"
 	$x86DistPath = Join-Path $distPath "toybox-ics-win-x86.zip"
 	$x64DistPath = Join-Path $distPath "toybox-ics-win-x64.zip"
@@ -50,6 +54,39 @@ try
     $distPathText = [String]::Format(" * Dist Path : $distPath");
     write-host $distPathText -ForegroundColor blue
 	
+	$oldLocation = Get-Location
+	
+	
+	
+	# ----------------------------------------------------------------------
+	# Metadata
+	# ----------------------------------------------------------------------
+	
+	write-host
+	write-host "----------------------------------------"
+    write-host " # Metadata"
+    write-host "----------------------------------------"
+	
+	$product = "Toybox"
+	$productText = [String]::Format(" * Product : $product");
+    write-host $productText
+	
+	$assemblyDesc = "Toybox Image Conversion Server"
+	$assemblyDescText = [String]::Format(" * Assembly Description : $assemblyDesc");
+    write-host $assemblyDescText
+	
+	$assemblyVer = Get-Content $versionPath
+	$assemblyVerText = [String]::Format(" * Assembly Version : $assemblyVer");
+    write-host $assemblyVerText
+	
+	$company = "Toybox Contributors"
+	$companyText = [String]::Format(" * Assembly Description : $company");
+    write-host $companyText
+	
+	$copyright = "Copyright (c) 2022 Toybox Contributors."
+	$copyrightText = [String]::Format(" * Copyright : $copyright");
+    write-host $copyrightText
+	
 	
 	
 	# ----------------------------------------------------------------------
@@ -60,7 +97,6 @@ try
 	write-host "----------------------------------------"
     write-host " # Build options"
     write-host "----------------------------------------"
-    $oldLocation = Get-Location
 
     # OPTIONS
     write-host " * Configuration : Release" -ForegroundColor blue
@@ -89,11 +125,11 @@ try
 	
 	# Build a win-x86 application.
 	write-host " * Build an application(win-x86)"
-	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x86
+	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x86 -p:Product=$product -p:AssemblyTitle=$assemblyDesc -p:AssemblyVersion=$assemblyVer -p:Company=$company -p:Copyright=$copyright 
 	
 	# Build a win-x64 application.
 	write-host " * Build an application(win-x64)"
-	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x64
+	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x64 -p:Product=$product -p:AssemblyTitle=$assemblyDesc -p:AssemblyVersion=$assemblyVer -p:Company=$company -p:Copyright=$copyright 
 	
 	# Compress files to distribute.
 	write-host " * Compress and copy files"
