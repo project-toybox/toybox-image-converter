@@ -35,7 +35,7 @@ The application is built with such options.
  * __Configuration__ : Release
  * __RuntimeIdentifier(RID)__ : win-x86, win-x64
  * __TargetFramework__ : net6.0
- * __SelfContained__ : true
+ * __SelfContained__ : false
  * __PublishSingleFile__ : false
  * __PublishReadyToRun__ : true
  * __PublishTrimmed__ : false
