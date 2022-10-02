@@ -32,13 +32,13 @@ Image Conversion Server
 
 ### Options
 The application is built with such options.
- * Configuration : Release
- * RuntimeIdentifier(RID) : win-x86, win-x64
- * TargetFramework : net6.0
- * SelfContained : true
- * PublishSingleFile : false
- * PublishReadyToRun : true
- * PublishTrimmed : true
+ * __Configuration__ : Release
+ * __RuntimeIdentifier(RID)__ : win-x86, win-x64
+ * __TargetFramework__ : net6.0
+ * __SelfContained__ : true
+ * __PublishSingleFile__ : false
+ * __PublishReadyToRun__ : true
+ * __PublishTrimmed__ : true
 
 ### Guide
 1. Open a PowerShell terminal from the repository root.
