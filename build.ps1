@@ -1,62 +1,137 @@
 #Requires -RunAsAdministrator
 
-write-host "----------------------------------------"
+write-host " _____         _               ___ ___ ___ `n|_   _|__ _  _| |__  _____ __ |_ _/ __/ __|`n  | |/ _ \ || | '_ \/ _ \ \ /  | | (__\__ \`n  |_|\___/\_, |_.__/\___/_\_\ |___\___|___/`n	  |__/                             "
 write-host "Toybox Image Conversion Server Builder"
-write-host "----------------------------------------"
+write-host "Copyright (c) 2022 Toybox Contributors."
 
 try
 {
-    $oldLocation = Get-Location
-
+	# ----------------------------------------------------------------------
+	# Print Paths
+    # ----------------------------------------------------------------------
+	write-host
+	write-host "----------------------------------------"
+    write-host " # Paths"
+    write-host "----------------------------------------"
+	
+	# PATHS
     $fullPathOfCurrentScript = $MyInvocation.MyCommand.Definition # Full path of the script file.
     $fileNameOfCurrentScript = $MyInvocation.MyCommand.Name # Name of the script file.
-    $currentPath = $fullPathOfCurrentScript.Replace($fileNameOfCurrentScript, "") # Current executing path.
-    $srcPath = Join-Path $currentPath "src"
+    $repositoryPath = $fullPathOfCurrentScript.Replace($fileNameOfCurrentScript, "") # Current executing path.
+	$srcPath = Join-Path $repositoryPath "src\"
+	$projectPath = Join-Path $repositoryPath "src\ToyboxICS\ToyboxICS.csproj"
+	$x86BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\publish\x86\*"
+	$x64BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\publish\x64\*"
+	$distPath = Join-Path $repositoryPath "dist\"
+	$x86DistPath = Join-Path $distPath "toybox-ics-win-x86.zip"
+	$x64DistPath = Join-Path $distPath "toybox-ics-win-x64.zip"
 
-    # CURRENT PATH
-    $currentPathText = [String]::Format(" * Current Path : $currentPath");
-    write-host $currentPathText -ForegroundColor blue
-
-    # SRC PATH
-    $srcPathText = [String]::Format(" * Src Path : $srcPath");
-    write-host $srcPathText -ForegroundColor blue
-
-    # TARGET PLATFORM
-    write-host " * Target OS : Windows" -ForegroundColor blue
-    write-host " * Target Architecture : x86, x64" -ForegroundColor blue
-
-    Set-Location $srcPath
-
-    # ----------------------------------------------------------------------
-
-    # Backup vars.
-    $GOOS_OLD = $env:GOOS
-    $GOARCH_OLD = $env:GOARCH
-
-    # Build for x86.
-    $env:GOOS = 'windows'
-    $env:GOARCH = '386'
-    go build -o ../dist/x86/ics.exe ./main.go 
-
-    # Build for x64.
-    $env:GOOS = 'windows'
-    $env:GOARCH = 'amd64'
-    go build -o ../dist/x64/ics.exe ./main.go  
+    # REPO PATH
+    $repositoryPathText = [String]::Format(" * Repository Path : $repositoryPath");
+    write-host $repositoryPathText
+	
+	# SRC PATH
+    $srcPathText = [String]::Format(" * SRC Path : $srcPath");
+    write-host $srcPathText
+	
+	# PROJECT PATH
+    $projectPathText = [String]::Format(" * Project Path : $projectPath");
+    write-host $projectPathText
+	
+	# BIN(x86) PATH
+    $x86BinaryPathText = [String]::Format(" * Binary(x86) Path : $x86BinaryPath");
+    write-host $x86BinaryPathText -ForegroundColor blue
+		
+	# BIN(x64) PATH
+    $x64BinaryPathText = [String]::Format(" * Binary(x64) Path : $x64BinaryPath");
+    write-host $x64BinaryPathText -ForegroundColor blue
+	
+    # DIST PATH
+    $distPathText = [String]::Format(" * Dist Path : $distPath");
+    write-host $distPathText -ForegroundColor blue
 	
 	
-	dotnet build --configuration Release --runtime win-x86 --self-contained
+	
+	# ----------------------------------------------------------------------
+	# Print Build Options
+	# ----------------------------------------------------------------------
+	
+	write-host
+	write-host "----------------------------------------"
+    write-host " # Build options"
+    write-host "----------------------------------------"
+    $oldLocation = Get-Location
 
+    # OPTIONS
+    write-host " * Configuration : Release" -ForegroundColor blue
+    write-host " * Runtime Identifier : win-x86, win-x64" -ForegroundColor blue
+	write-host " * Target Framework : net6.0" -ForegroundColor blue
+	write-host " * Self Contained : true"
+	write-host " * Publish Single File : false"
+	write-host " * Publish Ready to Run : true"
+	write-host " * Publish Trimmed : true"
+	
+	
+	
+	# ----------------------------------------------------------------------
+	# Task
     # ----------------------------------------------------------------------
+	
+    write-host
+	write-host "----------------------------------------"
+    write-host " # Task"
+    write-host "----------------------------------------"
+	
+	# Change work directory.
+	$chdirText = [String]::Format(" * Change work directory to '$srcPath'.");
+	write-host $chdirText
+	Set-Location $srcPath
+	
+	# Build a win-x86 application.
+	write-host " * Build an application(win-x86)"
+	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x86
+	
+	# Build a win-x64 application.
+	write-host " * Build an application(win-x64)"
+	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x64
+	
+	# Compress files to distribute.
+	write-host " * Compress and copy files"
+	
+	if (Test-Path -Path $distPath) {
+	} else {
+		New-Item $distPath -itemType Directory
+	}
+	
+	Compress-Archive -Path $x86BinaryPath -DestinationPath $x86DistPath -Force
+    Compress-Archive -Path $x64BinaryPath -DestinationPath $x64DistPath -Force
 
-    # Done.
+
+	# ----------------------------------------------------------------------
+	# Result
+    # ----------------------------------------------------------------------
+	
+	write-host
+	write-host "----------------------------------------"
+    write-host " # Result"
+    write-host "----------------------------------------"
+	
     Set-Location $oldLocation
-
-    $env:GOOS = $GOOS_OLD
-    $env:GOARCH = $GOARCH_OLD
+	
     write-host " * Build completed." -ForegroundColor green
 }
 catch
 {
+	# ----------------------------------------------------------------------
+	# Result
+    # ----------------------------------------------------------------------
+	write-host
+	write-host "----------------------------------------"
+    write-host " # Result"
+    write-host "----------------------------------------"
+	
+	Set-Location $oldLocation
+	
     write-host " * Build failed." -ForegroundColor red
 	write-host $_.Exception -ForegroundColor red
 }
