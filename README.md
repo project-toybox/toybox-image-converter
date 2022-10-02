@@ -38,7 +38,7 @@ The application is built with such options.
  * __SelfContained__ : true
  * __PublishSingleFile__ : false
  * __PublishReadyToRun__ : true
- * __PublishTrimmed__ : true
+ * __PublishTrimmed__ : false
 
 ### Guide
 1. Open a PowerShell terminal from the repository root.

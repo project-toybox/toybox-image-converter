@@ -20,8 +20,8 @@ try
     $repositoryPath = $fullPathOfCurrentScript.Replace($fileNameOfCurrentScript, "") # Current executing path.
 	$srcPath = Join-Path $repositoryPath "src\"
 	$projectPath = Join-Path $repositoryPath "src\ToyboxICS\ToyboxICS.csproj"
-	$x86BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\publish\x86\*"
-	$x64BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\publish\x64\*"
+	$x86BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x86\*"
+	$x64BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x64\*"
 	$distPath = Join-Path $repositoryPath "dist\"
 	$x86DistPath = Join-Path $distPath "toybox-ics-win-x86.zip"
 	$x64DistPath = Join-Path $distPath "toybox-ics-win-x64.zip"
@@ -69,7 +69,7 @@ try
 	write-host " * Self Contained : true"
 	write-host " * Publish Single File : false"
 	write-host " * Publish Ready to Run : true"
-	write-host " * Publish Trimmed : true"
+	write-host " * Publish Trimmed : false"
 	
 	
 	
