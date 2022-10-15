@@ -15,15 +15,10 @@
 ```
 Image Conversion Server
 ┣━ /api
-┃  ┣━ /cache
-┃  ┃  ┣━ /create
-┃  ┃  ┣━ /list
-┃  ┃  ┗━ /remove
-┃  ┣━ /convert
-┃  ┣━ /logs
-┃  ┃  ┣━ /latest
-┃  ┃  ┗━ /list
-┃  ┗━ /status
+┃  ┣━ /cache(GET, POST, DELETE)
+┃  ┣━ /convert(GET, POST)
+┃  ┣━ /logs(GET)
+┃  ┗━ /status(GET)
 ┣━ /error
 ┗━ /index
 ```
