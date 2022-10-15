@@ -1,0 +1,55 @@
+name: Build on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Find a Tag
+        id: find_tag
+        uses: pozetroninc/github-action-get-latest-release@master
+        with: 
+          owner: project-toybox
+          repo: toybox-image-conversion-server
+          excludes: draft        
+
+      - name: Update the Latest Release
+        id: update_latest_release
+        uses: tubone24/update_release@v1.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ steps.find_tag.outputs.release }}
+    outputs:
+      upload_url: ${{ steps.update_latest_release.outputs.upload_url }}
+
+  build-and-upload-artifacts:
+    needs: prepare
+    name: Build and Upload Artifacts
+    runs-on: windows-2019
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Setup .NET 6 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+        
+      - name: Read the Build Script
+        id: read_build_script
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./build.ps1
+
+      - name: Run the Build Script
+        id: read_build_script
+        uses: Amadevus/pwsh-script@v2
+        with:
+          script: ${{ steps.read_build_script.outputs.content }}
