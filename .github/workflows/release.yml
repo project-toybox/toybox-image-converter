@@ -49,7 +49,7 @@ jobs:
           path: ./build.ps1
 
       - name: Run the Build Script
-        id: read_build_script
+        id: run_build_script
         uses: Amadevus/pwsh-script@v2
         with:
           script: ${{ steps.read_build_script.outputs.content }}
