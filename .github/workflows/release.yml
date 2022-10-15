@@ -29,9 +29,9 @@ jobs:
     outputs:
       upload_url: ${{ steps.update_latest_release.outputs.upload_url }}
 
-  build-and-upload-artifacts:
+  build-and-upload-assets:
     needs: prepare
-    name: Build and Upload Artifacts
+    name: Build and Upload Assets
     runs-on: windows-2019
     steps:
       - name: Checkout
@@ -41,6 +41,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
+
+      - name: Read Version Information
+        id: read_version_info
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./VERSION
         
       - name: Read the Build Script
         id: read_build_script
@@ -53,3 +59,23 @@ jobs:
         uses: Amadevus/pwsh-script@v2
         with:
           script: ${{ steps.read_build_script.outputs.content }}
+
+      - name: Upload Assets(x86)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with: 
+          upload_url: ${{ needs.prepare.outputs.upload_url }}
+          asset_path: ./dist/toybox-ics-v${{ steps.read_version_info.outputs.content }}-x86.zip
+          asset_name: toybox-ics-v${{ steps.read_version_info.outputs.content }}-x86.zip
+          asset_content_type: application/zip
+
+      - name: Upload Assets(x64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with: 
+          upload_url: ${{ needs.prepare.outputs.upload_url }}
+          asset_path: ./dist/toybox-ics-v${{ steps.read_version_info.outputs.content }}-x64.zip
+          asset_name: toybox-ics-v${{ steps.read_version_info.outputs.content }}-x64.zip
+          asset_content_type: application/zip

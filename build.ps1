@@ -5,14 +5,8 @@ write-host "Toybox Image Conversion Server Builder"
 write-host "Copyright (c) 2022 Toybox Contributors."
 
 try
-{
-	# ----------------------------------------------------------------------
-	# Print Paths
-    # ----------------------------------------------------------------------
-	write-host
-	write-host "----------------------------------------"
-    write-host " # Paths"
-    write-host "----------------------------------------"
+{	
+    $oldLocation = Get-Location
 	
 	# PATHS
     $fullPathOfCurrentScript = $MyInvocation.MyCommand.Definition # Full path of the script file.
@@ -23,12 +17,32 @@ try
 	$projectPath = Join-Path $repositoryPath "src\ToyboxICS\ToyboxICS.csproj"
 	$versionPath = Join-Path $repositoryPath "VERSION"
 	
+	# METADATA
+	$product = "Toybox"
+    $assemblyDesc = "Toybox Image Conversion Server"
+    $assemblyVer = Get-Content $versionPath
+	$company = "Toybox Contributors"
+	$copyright = "Copyright (c) 2022 Toybox Contributors."
+	
+	# PATHS(FOR DIST)
 	$x86BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x86\*"
 	$x64BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x64\*"
 	
 	$distPath = Join-Path $repositoryPath "dist\"
-	$x86DistPath = Join-Path $distPath "toybox-ics-win-x86.zip"
-	$x64DistPath = Join-Path $distPath "toybox-ics-win-x64.zip"
+	$x86DistFilename = [String]::Format("toybox-ics-v$assemblyVer-x86.zip");
+	$x86DistPath = Join-Path $distPath $x86DistFilename;
+	$x64DistFilename = [String]::Format("toybox-ics-v$assemblyVer-x64.zip");
+	$x64DistPath = Join-Path $distPath $x64DistFilename;
+
+
+
+	# ----------------------------------------------------------------------
+	# Print Paths
+    # ----------------------------------------------------------------------
+	write-host
+	write-host "----------------------------------------"
+    write-host " # Paths"
+    write-host "----------------------------------------"
 
     # REPO PATH
     $repositoryPathText = [String]::Format(" * Repository Path : $repositoryPath");
@@ -54,8 +68,6 @@ try
     $distPathText = [String]::Format(" * Dist Path : $distPath");
     write-host $distPathText -ForegroundColor blue
 	
-	$oldLocation = Get-Location
-	
 	
 	
 	# ----------------------------------------------------------------------
@@ -67,23 +79,18 @@ try
     write-host " # Metadata"
     write-host "----------------------------------------"
 	
-	$product = "Toybox"
 	$productText = [String]::Format(" * Product : $product");
     write-host $productText
 	
-	$assemblyDesc = "Toybox Image Conversion Server"
 	$assemblyDescText = [String]::Format(" * Assembly Description : $assemblyDesc");
     write-host $assemblyDescText
 	
-	$assemblyVer = Get-Content $versionPath
 	$assemblyVerText = [String]::Format(" * Assembly Version : $assemblyVer");
     write-host $assemblyVerText
 	
-	$company = "Toybox Contributors"
 	$companyText = [String]::Format(" * Assembly Description : $company");
     write-host $companyText
 	
-	$copyright = "Copyright (c) 2022 Toybox Contributors."
 	$copyrightText = [String]::Format(" * Copyright : $copyright");
     write-host $copyrightText
 	
