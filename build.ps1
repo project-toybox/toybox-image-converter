@@ -15,7 +15,7 @@ try
     $repositoryPath = $fullPathOfCurrentScript.Replace($fileNameOfCurrentScript, "") # Current executing path.
 	$srcPath = Join-Path $repositoryPath "src\"
 	$projectPath = Join-Path $repositoryPath "src\ToyboxICS\ToyboxICS.csproj"
-	$versionPath = Join-Path $repositoryPath "VERSION"
+	$versionPath = Join-Path $repositoryPath "./VERSION"
 	
 	# METADATA
 	$product = "Toybox"

@@ -42,23 +42,16 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Read Version Information
+      - name: Read the VERSION
         id: read_version_info
         uses: juliangruber/read-file-action@v1
         with:
           path: ./VERSION
         
-      - name: Read the Build Script
-        id: read_build_script
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./build.ps1
-
       - name: Run the Build Script
-        id: run_build_script
-        uses: Amadevus/pwsh-script@v2
-        with:
-          script: ${{ steps.read_build_script.outputs.content }}
+        run:
+          ./build.ps1
+        shell: pwsh
 
       - name: Upload Assets(x86)
         uses: actions/upload-release-asset@v1
