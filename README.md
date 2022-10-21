@@ -47,4 +47,6 @@ The application is built with such options.
 3. The compiled program will be stored in `./dist/`.
 
 ## License
-The contents are available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The contents are freely available under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+The licenses of third-party libraries can be found [here](https://github.com/project-toybox/toybox-image-conversion-server/blob/main/docs/THIRD_PARTY_NOTICES.md).
