@@ -33,13 +33,14 @@ Image Conversion Server
 
 ### Options
 The application is built with such options.
+Do not use trimming as it may cause instability in third-party libraries.
  * __Configuration__ : Release
  * __RuntimeIdentifier(RID)__ : win-x86, win-x64
  * __TargetFramework__ : net6.0
  * __SelfContained__ : true
  * __PublishSingleFile__ : false
  * __PublishReadyToRun__ : true
- * __PublishTrimmed__ : true
+ * __PublishTrimmed__ : false
 
 ### Guide
 1. Open a PowerShell terminal from the repository root.
