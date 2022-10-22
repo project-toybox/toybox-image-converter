@@ -36,10 +36,10 @@ The application is built with such options.
  * __Configuration__ : Release
  * __RuntimeIdentifier(RID)__ : win-x86, win-x64
  * __TargetFramework__ : net6.0
- * __SelfContained__ : false
+ * __SelfContained__ : true
  * __PublishSingleFile__ : false
  * __PublishReadyToRun__ : true
- * __PublishTrimmed__ : false
+ * __PublishTrimmed__ : true
 
 ### Guide
 1. Open a PowerShell terminal from the repository root.
@@ -47,6 +47,6 @@ The application is built with such options.
 3. The compiled program will be stored in `./dist/`.
 
 ## License
-The contents are freely available under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The contents are freely available under the [MIT License](http://opensource.org/licenses/MIT).
 
 The licenses of third-party libraries can be found [here](https://github.com/project-toybox/toybox-image-conversion-server/blob/main/docs/THIRD_PARTY_NOTICES.md).
