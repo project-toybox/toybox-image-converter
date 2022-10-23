@@ -109,7 +109,7 @@ try
     write-host " * Configuration : Release" -ForegroundColor blue
     write-host " * Runtime Identifier : win-x86, win-x64" -ForegroundColor blue
 	write-host " * Target Framework : net6.0" -ForegroundColor blue
-	write-host " * Self Contained : false"
+	write-host " * Self Contained : true"
 	write-host " * Publish Single File : false"
 	write-host " * Publish Ready to Run : true"
 	write-host " * Publish Trimmed : false"

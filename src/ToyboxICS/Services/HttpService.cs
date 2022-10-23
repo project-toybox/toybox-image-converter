@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ToyboxICS.Utilities
+namespace ToyboxICS.Services
 {
-    internal class ImageProcessor
+    internal class HttpService
     {
     }
 }
