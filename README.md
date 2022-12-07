@@ -5,15 +5,17 @@
 <p align="center">
     <h1 align="center">
         <img src="https://raw.githubusercontent.com/project-toybox/toybox-assets/main/images/toybox-icon.png" width="50" height="50">
-        <p>Toybox Image Conversion Server</p>
+        <p>Toybox Image Converter</p>
     </h1>
-    <p align="center">A server application that provides image conversion APIs to Toybox components.<br>Available with REST API.</p>
+    <p align="center">An image format converter for Toybox<br>Available with REST API</p>
     <br>
 </p>
 
 ## Structure
+
+### REST API
 ```
-Image Conversion Server
+Image Converter
 ┣━ /api
 ┃  ┣━ /cache(GET, POST, DELETE)
 ┃  ┣━ /convert(GET, POST)
@@ -23,6 +25,21 @@ Image Conversion Server
 ┣━ /about
 ┣━ /error
 ┗━ /index
+```
+
+### IPC
+```
+Image Converter
+┣━ Default Functions
+┃  ┣━ About
+┃  ┣━ Ping-pong
+┃  ┣━ Shutdown
+┃  ┗━ Status
+┣━ Image Conversion Functions
+┃  ┣━ GetConvertedImage
+┃  ┗━ SaveConvertedImage
+┗━ Image Quality Assessment Functions
+   ┗━ Assess
 ```
 
 ## Usage
