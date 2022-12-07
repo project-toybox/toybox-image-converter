@@ -18,7 +18,9 @@ Image Conversion Server
 ┃  ┣━ /cache(GET, POST, DELETE)
 ┃  ┣━ /convert(GET, POST)
 ┃  ┣━ /logs(GET)
+┃  ┣━ /preload(GET)
 ┃  ┗━ /status(GET)
+┣━ /about
 ┣━ /error
 ┗━ /index
 ```
