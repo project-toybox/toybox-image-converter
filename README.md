@@ -11,37 +11,6 @@
     <br>
 </p>
 
-## Structure
-
-### REST API
-```
-Image Converter
-┣━ /api
-┃  ┣━ /cache(GET, POST, DELETE)
-┃  ┣━ /convert(GET, POST)
-┃  ┣━ /logs(GET)
-┃  ┣━ /preload(GET)
-┃  ┗━ /status(GET)
-┣━ /about
-┣━ /error
-┗━ /index
-```
-
-### IPC
-```
-Image Converter
-┣━ Default Functions
-┃  ┣━ About
-┃  ┣━ Ping-pong
-┃  ┣━ Shutdown
-┃  ┗━ Status
-┣━ Image Conversion Functions
-┃  ┣━ GetConvertedImage
-┃  ┗━ SaveConvertedImage
-┗━ Image Quality Assessment Functions
-   ┗━ Assess
-```
-
 ## Usage
 [View the documentation](README.md) for usage information.
 
