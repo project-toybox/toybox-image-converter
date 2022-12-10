@@ -1,4 +1,4 @@
-﻿namespace ToyboxICS
+﻿namespace ToyboxImageConverter
 {
     internal class Program
     {
