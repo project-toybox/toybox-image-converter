@@ -7,13 +7,11 @@
 
 [CmdletBinding(PositionalBinding = $false)]
 Param(
-    [string][Alias('c')]$configuration = "Release",
     [string][Alias('v')]$verbosity = "minimal",
-    [string][Alias('p')]$platform = "x64",
-    [string][Alias('s')]$solution = "",
+    [string][Alias('t')]$target = "",
 	[Parameter(ValueFromRemainingArguments = $true)][String[]]$properties,
-    [switch][Alias('r')]$restore,
-    [switch][Alias('b')]$build,
+    [switch] $restore,
+    [switch] $build,
     [switch] $nologo,
     [switch] $help
 )
@@ -30,16 +28,15 @@ function Invoke-ExitWithExitCode([int] $exitCode) {
 
 function Invoke-Help {
     Write-Host "Common settings:"
-    Write-Host "  -configuration <value>  Build configuration: 'Debug' or 'Release' (short: -c)"
-    Write-Host "  -platform <value>       Platform configuration: 'x86', 'x64' or any valid Platform value to pass to msbuild"
-    Write-Host "  -verbosity <value>      Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
-    Write-Host "  -nologo                 Doesn't display the startup banner or the copyright message"
-    Write-Host "  -help                   Print help and exit"
+	Write-Host "  -verbosity <value>     Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
+	Write-Host "  -target <value>        Name of a solution or project file to build (short: -s)"
+    Write-Host "  -nologo                Doesn't display the startup banner or the copyright message"
+    Write-Host "  -help                  Print help and exit"
     Write-Host ""
 
     Write-Host "Actions:"
-    Write-Host "  -restore                Restore dependencies (short: -r)"
-    Write-Host "  -build                  Build solution (short: -b)"
+    Write-Host "  -restore               Restore dependencies"
+    Write-Host "  -build                 Build solution"
     Write-Host ""
 }
 
@@ -54,31 +51,27 @@ function Invoke-Hello {
 }
 
 function Initialize-Script {
-	if ([string]::IsNullOrEmpty($solution) -eq $True) {
-		Write-Host "Please specify a solution file." -ForegroundColor Red
+	if ([string]::IsNullOrEmpty($target) -eq $True) {
+		Write-Host "Please specify a target file(solution or project)." -ForegroundColor Red
 		Invoke-ExitWithExitCode 1
 	}
 
-    if ((Test-Path "$($PSScriptRoot)\..\src\$($solution)") -eq $False) {
-        Write-Host "Solution $($PSScriptRoot)\..\src\$($solution) not found." -ForegroundColor Red
+    if ((Test-Path "$($PSScriptRoot)\..\src\$($target)") -eq $False) {
+        Write-Host "Target $($PSScriptRoot)\..\src\$($target) not found." -ForegroundColor Red
         Invoke-ExitWithExitCode 1
     }
 
-    $Script:BuildPath = (Resolve-Path -Path "$($PSScriptRoot)\..\src\$($solution)").ToString()
+    $Script:BuildPath = (Resolve-Path -Path "$($PSScriptRoot)\..\src\$($target)").ToString()
 }
 
 function Invoke-Params {
 	$TextInfo = (Get-Culture).TextInfo
 	
-	Write-Host " * Verbosity:     " -NoNewline
+	Write-Host " * Verbosity:  " -NoNewline
     Write-Host "$($TextInfo.ToTitleCase($verbosity))" -ForegroundColor Cyan
-    Write-Host " * Solution:      " -NoNewline
-    Write-Host "$($Script:Solution)" -ForegroundColor Cyan
-    Write-Host " * Configuration: " -NoNewline
-    Write-Host "$($TextInfo.ToTitleCase($configuration))" -ForegroundColor Cyan
-    Write-Host " * Platform:      " -NoNewline
-    Write-Host "$($TextInfo.ToTitleCase($platform))" -ForegroundColor Cyan
-	Write-Host " * Properties:    " -NoNewline
+    Write-Host " * Target:     " -NoNewline
+    Write-Host "$target" -ForegroundColor Cyan
+	Write-Host " * Properties: " -NoNewline
     Write-Host "$([string]::IsNullOrEmpty($properties) -eq $True ? 'null' : $properties)" -ForegroundColor Cyan
     Write-Host ""
 }
@@ -102,7 +95,7 @@ function Invoke-Build {
         return
     }
 
-    dotnet build $Script:BuildPath --configuration $configuration --verbosity $verbosity --no-restore --nologo $properties
+    dotnet build $Script:BuildPath $properties --verbosity $verbosity --no-restore --nologo
 
     if ($lastExitCode -ne 0) {
         Write-Host "Build failed." -ForegroundColor Red
