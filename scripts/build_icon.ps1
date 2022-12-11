@@ -1,0 +1,1 @@
+. $PSScriptRoot\build.ps1 -restore -build -solution ToyboxImageConverter.sln

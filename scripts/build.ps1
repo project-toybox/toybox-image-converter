@@ -1,180 +1,132 @@
-#Requires -RunAsAdministrator
+# --------------------------------------------------
+# Toybox .NET Builder 
+# Copyright (c) 2022 handbros and Toybox Contributors all rights reserved.
+# --------------------------------------------------
 
-write-host " _____         _               ___ ___ ___ `n|_   _|__ _  _| |__  _____ __ |_ _/ __/ __|`n  | |/ _ \ || | '_ \/ _ \ \ /  | | (__\__ \`n  |_|\___/\_, |_.__/\___/_\_\ |___\___|___/`n	  |__/                             "
-write-host "Toybox Image Conversion Server Builder"
-write-host "Copyright (c) 2022 Toybox Contributors."
+#Requires -Version 7
 
-try
-{	
-    $oldLocation = Get-Location
-	
-	# PATHS
-    $fullPathOfCurrentScript = $MyInvocation.MyCommand.Definition # Full path of the script file.
-    $fileNameOfCurrentScript = $MyInvocation.MyCommand.Name # Name of the script file.
-	
-    $repositoryPath = $fullPathOfCurrentScript.Replace($fileNameOfCurrentScript, "") # Current executing path.
-	$srcPath = Join-Path $repositoryPath "src\"
-	$projectPath = Join-Path $repositoryPath "src\ToyboxICS\ToyboxICS.csproj"
-	$versionPath = Join-Path $repositoryPath "./VERSION"
-	
-	# METADATA
-	$product = "Toybox"
-    $assemblyDesc = "Toybox Image Conversion Server"
-    $assemblyVer = Get-Content $versionPath
-	$company = "Toybox Contributors"
-	$copyright = "Copyright (c) 2022 Toybox Contributors."
-	
-	# PATHS(FOR DIST)
-	$x86BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x86\*"
-	$x64BinaryPath = Join-Path $repositoryPath "src\ToyboxICS\bin\publish\x64\*"
-	
-	$distPath = Join-Path $repositoryPath "dist\"
-	$x86DistFilename = [String]::Format("toybox-ics-v$assemblyVer-x86.zip");
-	$x86DistPath = Join-Path $distPath $x86DistFilename;
-	$x64DistFilename = [String]::Format("toybox-ics-v$assemblyVer-x64.zip");
-	$x64DistPath = Join-Path $distPath $x64DistFilename;
+[CmdletBinding(PositionalBinding = $false)]
+Param(
+    [string][Alias('c')]$configuration = "Release",
+    [string][Alias('v')]$verbosity = "minimal",
+    [string][Alias('p')]$platform = "x64",
+    [string][Alias('s')]$solution = "",
+	[Parameter(ValueFromRemainingArguments = $true)][String[]]$properties,
+    [switch][Alias('r')]$restore,
+    [switch][Alias('b')]$build,
+    [switch] $nologo,
+    [switch] $help
+)
 
+$Script:BuildPath = ""
 
+function Invoke-ExitWithExitCode([int] $exitCode) {
+    if ($ci -and $prepareMachine) {
+        Stop-Processes
+    }
 
-	# ----------------------------------------------------------------------
-	# Print Paths
-    # ----------------------------------------------------------------------
-	write-host
-	write-host "----------------------------------------"
-    write-host " # Paths"
-    write-host "----------------------------------------"
+    exit $exitCode
+}
 
-    # REPO PATH
-    $repositoryPathText = [String]::Format(" * Repository Path : $repositoryPath");
-    write-host $repositoryPathText
-	
-	# SRC PATH
-    $srcPathText = [String]::Format(" * SRC Path : $srcPath");
-    write-host $srcPathText
-	
-	# PROJECT PATH
-    $projectPathText = [String]::Format(" * Project Path : $projectPath");
-    write-host $projectPathText
-	
-	# BIN(x86) PATH
-    $x86BinaryPathText = [String]::Format(" * Binary(x86) Path : $x86BinaryPath");
-    write-host $x86BinaryPathText -ForegroundColor blue
-		
-	# BIN(x64) PATH
-    $x64BinaryPathText = [String]::Format(" * Binary(x64) Path : $x64BinaryPath");
-    write-host $x64BinaryPathText -ForegroundColor blue
-	
-    # DIST PATH
-    $distPathText = [String]::Format(" * Dist Path : $distPath");
-    write-host $distPathText -ForegroundColor blue
-	
-	
-	
-	# ----------------------------------------------------------------------
-	# Metadata
-	# ----------------------------------------------------------------------
-	
-	write-host
-	write-host "----------------------------------------"
-    write-host " # Metadata"
-    write-host "----------------------------------------"
-	
-	$productText = [String]::Format(" * Product : $product");
-    write-host $productText
-	
-	$assemblyDescText = [String]::Format(" * Assembly Description : $assemblyDesc");
-    write-host $assemblyDescText
-	
-	$assemblyVerText = [String]::Format(" * Assembly Version : $assemblyVer");
-    write-host $assemblyVerText
-	
-	$companyText = [String]::Format(" * Assembly Description : $company");
-    write-host $companyText
-	
-	$copyrightText = [String]::Format(" * Copyright : $copyright");
-    write-host $copyrightText
-	
-	
-	
-	# ----------------------------------------------------------------------
-	# Print Build Options
-	# ----------------------------------------------------------------------
-	
-	write-host
-	write-host "----------------------------------------"
-    write-host " # Build options"
-    write-host "----------------------------------------"
+function Invoke-Help {
+    Write-Host "Common settings:"
+    Write-Host "  -configuration <value>  Build configuration: 'Debug' or 'Release' (short: -c)"
+    Write-Host "  -platform <value>       Platform configuration: 'x86', 'x64' or any valid Platform value to pass to msbuild"
+    Write-Host "  -verbosity <value>      Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
+    Write-Host "  -nologo                 Doesn't display the startup banner or the copyright message"
+    Write-Host "  -help                   Print help and exit"
+    Write-Host ""
 
-    # OPTIONS
-    write-host " * Configuration : Release" -ForegroundColor blue
-    write-host " * Runtime Identifier : win-x86, win-x64" -ForegroundColor blue
-	write-host " * Target Framework : net6.0" -ForegroundColor blue
-	write-host " * Self Contained : true"
-	write-host " * Publish Single File : false"
-	write-host " * Publish Ready to Run : true"
-	write-host " * Publish Trimmed : false"
+    Write-Host "Actions:"
+    Write-Host "  -restore                Restore dependencies (short: -r)"
+    Write-Host "  -build                  Build solution (short: -b)"
+    Write-Host ""
+}
+
+function Invoke-Hello {
+    if ($nologo) {
+        return
+    }
 	
-	
-	
-	# ----------------------------------------------------------------------
-	# Task
-    # ----------------------------------------------------------------------
-	
-    write-host
-	write-host "----------------------------------------"
-    write-host " # Task"
-    write-host "----------------------------------------"
-	
-	# Change work directory.
-	$chdirText = [String]::Format(" * Change work directory to '$srcPath'.");
-	write-host $chdirText
-	Set-Location $srcPath
-	
-	# Build a win-x86 application.
-	write-host " * Build an application(win-x86)"
-	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x86 -p:Product=$product -p:AssemblyTitle=$assemblyDesc -p:AssemblyVersion=$assemblyVer -p:Company=$company -p:Copyright=$copyright 
-	
-	# Build a win-x64 application.
-	write-host " * Build an application(win-x64)"
-	dotnet publish $projectPath -v m -c Release -p:PublishProfile=x64 -p:Product=$product -p:AssemblyTitle=$assemblyDesc -p:AssemblyVersion=$assemblyVer -p:Company=$company -p:Copyright=$copyright 
-	
-	# Compress files to distribute.
-	write-host " * Compress and copy files"
-	
-	if (Test-Path -Path $distPath) {
-	} else {
-		New-Item $distPath -itemType Directory
+	Write-Host "Toybox .NET Builder" -ForegroundColor White
+	Write-Host "Copyright (c) 2022-$(Get-Date -UFormat "%Y") handbros and Toybox Contributors all rights reserved." -ForegroundColor White
+    Write-Host ""
+}
+
+function Initialize-Script {
+	if ([string]::IsNullOrEmpty($solution) -eq $True) {
+		Write-Host "Please specify a solution file." -ForegroundColor Red
+		Invoke-ExitWithExitCode 1
 	}
+
+    if ((Test-Path "$($PSScriptRoot)\..\src\$($solution)") -eq $False) {
+        Write-Host "Solution $($PSScriptRoot)\..\src\$($solution) not found." -ForegroundColor Red
+        Invoke-ExitWithExitCode 1
+    }
+
+    $Script:BuildPath = (Resolve-Path -Path "$($PSScriptRoot)\..\src\$($solution)").ToString()
+}
+
+function Invoke-Params {
+	$TextInfo = (Get-Culture).TextInfo
 	
-	Compress-Archive -Path $x86BinaryPath -DestinationPath $x86DistPath -Force
-    Compress-Archive -Path $x64BinaryPath -DestinationPath $x64DistPath -Force
+	Write-Host " * Verbosity:     " -NoNewline
+    Write-Host "$($TextInfo.ToTitleCase($verbosity))" -ForegroundColor Cyan
+    Write-Host " * Solution:      " -NoNewline
+    Write-Host "$($Script:Solution)" -ForegroundColor Cyan
+    Write-Host " * Configuration: " -NoNewline
+    Write-Host "$($TextInfo.ToTitleCase($configuration))" -ForegroundColor Cyan
+    Write-Host " * Platform:      " -NoNewline
+    Write-Host "$($TextInfo.ToTitleCase($platform))" -ForegroundColor Cyan
+	Write-Host " * Properties:    " -NoNewline
+    Write-Host "$([string]::IsNullOrEmpty($properties) -eq $True ? 'null' : $properties)" -ForegroundColor Cyan
+    Write-Host ""
+}
+
+function Invoke-Restore {
+    if (-not $restore) {
+        return
+    }
+
+    dotnet restore $Script:BuildPath --verbosity $verbosity
+
+    if ($lastExitCode -ne 0) {
+        Write-Host "Restore failed." -ForegroundColor Red
+
+        Invoke-ExitWithExitCode $LastExitCode
+    }
+}
+
+function Invoke-Build {
+    if (-not $build) {
+        return
+    }
+
+    dotnet build $Script:BuildPath --configuration $configuration --verbosity $verbosity --no-restore --nologo $properties
+
+    if ($lastExitCode -ne 0) {
+        Write-Host "Build failed." -ForegroundColor Red
+        Invoke-ExitWithExitCode $LastExitCode
+    }
+}
 
 
-	# ----------------------------------------------------------------------
-	# Result
-    # ----------------------------------------------------------------------
-	
-	write-host
-	write-host "----------------------------------------"
-    write-host " # Result"
-    write-host "----------------------------------------"
-	
-    Set-Location $oldLocation
-	
-    write-host " * Build completed." -ForegroundColor green
+if ($help) {
+    Invoke-Help
+
+    exit 0
 }
-catch
-{
-	# ----------------------------------------------------------------------
-	# Result
-    # ----------------------------------------------------------------------
-	write-host
-	write-host "----------------------------------------"
-    write-host " # Result"
-    write-host "----------------------------------------"
-	
-	Set-Location $oldLocation
-	
-    write-host " * Build failed." -ForegroundColor red
-	write-host $_.Exception -ForegroundColor red
+
+[timespan]$execTime = Measure-Command {
+    Invoke-Hello | Out-Default
+    Initialize-Script | Out-Default
+	Invoke-Params | Out-Default
+    Invoke-Restore | Out-Default
+    Invoke-Build | Out-Default
 }
+
+Write-Host "Finished in " -NoNewline
+Write-Host "$($execTime.Minutes) min, $($execTime.Seconds) sec, $($execTime.Milliseconds) ms." -ForegroundColor Cyan
+
+Write-Host "Finished at " -NoNewline
+Write-Host "$(Get-Date -UFormat "%Y. %m. %d. %R")." -ForegroundColor Cyan

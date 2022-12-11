@@ -5,7 +5,7 @@ namespace ToyboxImageConverter.Tests
         [Fact]
         public void Test1()
         {
-
+            Assert.False(false, "Test condition");
         }
     }
 }
