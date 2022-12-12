@@ -10,8 +10,8 @@ Param(
     [string][Alias('v')]$verbosity = "minimal",
     [string][Alias('t')]$target = "",
 	[string][Alias('p')]$publishProfile = "",
-    [switch] $noLogo,
-    [switch] $help,
+    [switch]$noLogo,
+    [switch]$help,
 	
 	[string]$productName = "Unknown Product",
 	[string]$productVersion = "1.0.0.0",
@@ -20,7 +20,7 @@ Param(
 	[string]$company = "Unknown Corporation",
 	[string]$copyright = "Unknown Copyright",
 	
-	[switch] $excludeSymbols,
+	[switch]$excludeSymbols,
 	
 	[Parameter(ValueFromRemainingArguments = $true)][String[]]$properties
 	
