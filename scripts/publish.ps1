@@ -10,6 +10,7 @@ Param(
     [string][Alias('v')]$verbosity = "minimal",
     [string][Alias('t')]$target = "",
 	[string][Alias('p')]$publishProfile = "",
+    [bool][Alias('e')]$excludeSymbols = $true,
     [switch]$noLogo,
     [switch]$help,
 	
@@ -20,10 +21,7 @@ Param(
 	[string]$company = "Unknown Corporation",
 	[string]$copyright = "Unknown Copyright",
 	
-	[switch]$excludeSymbols,
-	
 	[Parameter(ValueFromRemainingArguments = $true)][String[]]$properties
-	
 )
 
 $Script:BuildPath = ""
@@ -41,6 +39,7 @@ function Invoke-Help {
 	Write-Host "  -verbosity <value>         Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
 	Write-Host "  -target <value>            Name of a solution or project file to build (short: -s)"
 	Write-Host "  -publishProfile <value>    Publish profile to use (short: -p)"
+	Write-Host "  -excludeSymbols <value>    If it is true, exclude debug symbols(*.pdb) (short: -e)"
     Write-Host "  -noLogo                    Doesn't display the startup banner or the copyright message"
     Write-Host "  -help                      Print help and exit"
     Write-Host ""
@@ -53,10 +52,6 @@ function Invoke-Help {
 	Write-Host "  -company <value>           Company name"
 	Write-Host "  -copyright <value>         Copyright information"
 	Write-Host ""
-
-    Write-Host "Switches:"
-    Write-Host "  -excludeSymbols            Restore dependencies"
-    Write-Host ""
 }
 
 function Invoke-Hello {
@@ -108,7 +103,7 @@ function Invoke-Restore {
 }
 
 function Invoke-Publish {
-	if ($excludeSymbols) {
+	if ($excludeSymbols -eq $true) {
         dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:DebugType=None -p:DebugSymbols=false -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
     } else {
 		dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
