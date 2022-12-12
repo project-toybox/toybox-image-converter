@@ -11,7 +11,7 @@ on:
       product-version:
         description: 'Product version'
         required: true
-        default: '1.0.0.0'
+        default: '1.0.0'
         type: string
       file-desc:
         description: 'File description'
@@ -21,7 +21,7 @@ on:
       file-version:
         description: 'File version'
         required: true
-        default: '1.0.0.0'
+        default: '1.0.0'
         type: string
       company:
         description: 'Company'
@@ -31,7 +31,7 @@ on:
       copyright:
         description: 'Copyright'
         required: true
-        default: 'Copyright (c) 2022 handbros and Toybox Contributors all rights reserved.'
+        default: 'Copyright (c) 2022 Toybox Contributors all rights reserved.'
         type: string
       remove-debug-symbols:
         description: 'Remove debug symbols'
