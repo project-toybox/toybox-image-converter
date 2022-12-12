@@ -93,6 +93,16 @@ function Initialize-Script {
 	$Script:ProfilePath = (Resolve-Path -Path "$($PSScriptRoot)\publish_profiles\$($publishprofile)").ToString()
 }
 
+function Invoke-Restore {
+    dotnet restore $Script:TargetPath --verbosity $verbosity
+
+    if ($lastExitCode -ne 0) {
+        Write-Host "Restore failed." -ForegroundColor Red
+
+        Invoke-ExitWithExitCode $LastExitCode
+    }
+}
+
 function Invoke-Publish {
     dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:Product=$productname -p:Version=$productversion -p:AssemblyTitle=$filedesc -p:AssemblyVersion=$fileversion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
 
@@ -112,6 +122,7 @@ if ($help) {
 [timespan]$execTime = Measure-Command {
     Invoke-Hello | Out-Default
     Initialize-Script | Out-Default
+	Invoke-Restore | Out-Default
     Invoke-Publish | Out-Default
 }
 
