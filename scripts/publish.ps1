@@ -9,16 +9,21 @@
 Param(
     [string][Alias('v')]$verbosity = "minimal",
     [string][Alias('t')]$target = "",
-	[string][Alias('p')]$publishprofile = "",
-	[string]$productname = "Unknown Product",
-	[string]$productversion = "1.0.0.0",
-	[string]$filedesc = "Unknown File Description",
-	[string]$fileversion = "1.0.0.0",
+	[string][Alias('p')]$publishProfile = "",
+    [switch] $noLogo,
+    [switch] $help,
+	
+	[string]$productName = "Unknown Product",
+	[string]$productVersion = "1.0.0.0",
+	[string]$fileDesc = "Unknown File Description",
+	[string]$fileVersion = "1.0.0.0",
 	[string]$company = "Unknown Corporation",
 	[string]$copyright = "Unknown Copyright",
-	[Parameter(ValueFromRemainingArguments = $true)][String[]]$properties,
-    [switch] $nologo,
-    [switch] $help
+	
+	[switch] $excludeSymbols,
+	
+	[Parameter(ValueFromRemainingArguments = $true)][String[]]$properties
+	
 )
 
 $Script:BuildPath = ""
@@ -35,23 +40,22 @@ function Invoke-Help {
     Write-Host "Common settings:"
 	Write-Host "  -verbosity <value>         Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
 	Write-Host "  -target <value>            Name of a solution or project file to build (short: -s)"
-	Write-Host "  -publishprofile <value>    Publish profile to use (short: -p)"
-    Write-Host "  -nologo                    Doesn't display the startup banner or the copyright message"
+	Write-Host "  -publishProfile <value>    Publish profile to use (short: -p)"
+    Write-Host "  -noLogo                    Doesn't display the startup banner or the copyright message"
     Write-Host "  -help                      Print help and exit"
     Write-Host ""
 	
 	Write-Host "Descriptions:"
-	Write-Host "  -productname <value>       Product name"
-	Write-Host "  -productversion <value>    Product version"
-	Write-Host "  -filedesc <value>          File description"
-	Write-Host "  -fileversion <value>       File version"
+	Write-Host "  -productName <value>       Product name"
+	Write-Host "  -productVersion <value>    Product version"
+	Write-Host "  -fileDesc <value>          File description"
+	Write-Host "  -fileVersion <value>       File version"
 	Write-Host "  -company <value>           Company name"
 	Write-Host "  -copyright <value>         Copyright information"
 	Write-Host ""
 
-    Write-Host "Actions:"
-    Write-Host "  -restore                   Restore dependencies"
-    Write-Host "  -build                     Build solution"
+    Write-Host "Switches:"
+    Write-Host "  -excludeSymbols            Restore dependencies"
     Write-Host ""
 }
 
@@ -80,17 +84,17 @@ function Initialize-Script {
     $Script:TargetPath = (Resolve-Path -Path "$($PSScriptRoot)\..\src\$($target)").ToString()
 	
 	# Check the publish profile
-	if ([string]::IsNullOrEmpty($publishprofile) -eq $True) {
+	if ([string]::IsNullOrEmpty($publishProfile) -eq $True) {
 		Write-Host "Please specify a publish profile." -ForegroundColor Red
 		Invoke-ExitWithExitCode 1
 	}
 
-    if ((Test-Path "$($PSScriptRoot)\publish_profiles\$($publishprofile)") -eq $False) {
-        Write-Host "Publish profile $($PSScriptRoot)\publish_profiles\$($publishprofile) not found." -ForegroundColor Red
+    if ((Test-Path "$($PSScriptRoot)\publish_profiles\$($publishProfile)") -eq $False) {
+        Write-Host "Publish profile $($PSScriptRoot)\publish_profiles\$($publishProfile) not found." -ForegroundColor Red
         Invoke-ExitWithExitCode 1
     }
 	
-	$Script:ProfilePath = (Resolve-Path -Path "$($PSScriptRoot)\publish_profiles\$($publishprofile)").ToString()
+	$Script:ProfilePath = (Resolve-Path -Path "$($PSScriptRoot)\publish_profiles\$($publishProfile)").ToString()
 }
 
 function Invoke-Restore {
@@ -104,7 +108,11 @@ function Invoke-Restore {
 }
 
 function Invoke-Publish {
-    dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:Product=$productname -p:Version=$productversion -p:AssemblyTitle=$filedesc -p:AssemblyVersion=$fileversion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
+	if ($excludeSymbols) {
+        dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:DebugType=None -p:DebugSymbols=false -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
+    } else {
+		dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
+	}
 
     if ($lastExitCode -ne 0) {
         Write-Host "Publishing failed." -ForegroundColor Red
