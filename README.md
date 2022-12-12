@@ -1,5 +1,7 @@
 <p align="right">
-<img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-image-conversion-server">
+<a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/project-toybox/toybox-image-converter/Release"></a>
+<a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/releases/latest"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/project-toybox/toybox-image-converter"></a>
+<a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-image-converter"></a>
 </p>
 
 <p align="center">
@@ -7,7 +9,7 @@
         <img src="https://raw.githubusercontent.com/project-toybox/toybox-assets/main/images/toybox-icon.png" width="50" height="50">
         <p>Toybox Image Converter</p>
     </h1>
-    <p align="center">An image format converter for Toybox<br>Available with REST API</p>
+    <p align="center">An image format converter for Toybox</p>
     <br>
 </p>
 
@@ -17,23 +19,18 @@
 ## Build
 ### Requirements
  * __OS__ : Windows 10 or higher version(include server edtions)
- * __Tools__ : [PowerShell(v7 or higher version)](https://github.com/PowerShell/PowerShell), [.NET SDK(v6.0 or higher version)](https://dotnet.microsoft.com/en-us/download)
-
-### Options
-The application is built with such options.
-Do not use trimming as it may cause instability in third-party libraries.
- * __Configuration__ : Release
- * __RuntimeIdentifier(RID)__ : win-x86, win-x64
- * __TargetFramework__ : net6.0
- * __SelfContained__ : true
- * __PublishSingleFile__ : false
- * __PublishReadyToRun__ : true
- * __PublishTrimmed__ : false
+ * __Tools__
+   * [PowerShell 7](https://github.com/PowerShell/PowerShell)
+   * [Visual Studio 2022](https://visualstudio.microsoft.com/)(include 'Desktop development with C++' and '.NET desktop development' workload)
+   * [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download)
 
 ### Guide
-1. Open a PowerShell terminal from the repository root.
-2. Run this command with administrator privilege: `./build.ps1`
-3. The compiled program will be stored in `./dist/`.
+1. Open a PowerShell terminal from `./scripts`.
+2. Run the commands below.
+```pwsh
+Set-ExecutionPolicy Unrestricted
+./publish.ps1 -target ToyboxImageConverter/ToyboxImageConverter.csproj -publishProfile (x64|arm64).pubxml -excludeSymbols $(true|false)
+```
 
 ## License
 The contents are freely available under the [MIT License](http://opensource.org/licenses/MIT).
