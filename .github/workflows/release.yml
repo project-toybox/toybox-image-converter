@@ -54,13 +54,11 @@ jobs:
         
       - name: Build for x64
         run: |
-          if (
           ./scripts/publish.ps1 -target ToyboxImageConverter/ToyboxImageConverter.csproj -publishprofile x64.pubxml -productName "${{ inputs.product-name }}" -productVersion "${{ inputs.product-version }}" -fileDesc "${{ inputs.file-desc }}" -fileVersion "${{ inputs.file-version }}" -company "${{ inputs.company }}" -copyright "${{ inputs.copyright }}" ${{ inputs.remove-debug-symbols == 'true' ? '-excludeSymbols' : ''  }}
         shell: pwsh
         
       - name: Build for ARM64
         run: |
-          if (
           ./scripts/publish.ps1 -target ToyboxImageConverter/ToyboxImageConverter.csproj -publishprofile arm64.pubxml -productName "${{ inputs.product-name }}" -productVersion "${{ inputs.product-version }}" -fileDesc "${{ inputs.file-desc }}" -fileVersion "${{ inputs.file-version }}" -company "${{ inputs.company }}" -copyright "${{ inputs.copyright }}" ${{ inputs.remove-debug-symbols == 'true' ? '-excludeSymbols' : ''  }}
         shell: pwsh
         
