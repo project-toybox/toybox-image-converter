@@ -1,5 +1,0 @@
-# Build: win-x64
-. $PSScriptRoot\build.ps1 -restore -build -target ToyboxImageConverter/ToyboxImageConverter.csproj --framework net7.0 --configuration Release --runtime win-x64 --self-contained true "-p:PublishAot=true;InvariantGlobalization=true;UseSystemResourceKeys=true;IlcOptimizationPreference=Size;IlcGenerateStackTraceData=false;DebuggerSupport=false;EnableUnsafeBinaryFormatterSerialization=false;EventSourceSupport=false;HttpActivityPropagationSupport=false;MetadataUpdaterSupport=false"
-
-# Build: win-arm64
-. $PSScriptRoot\build.ps1 -restore -build -target ToyboxImageConverter/ToyboxImageConverter.csproj --framework net7.0 --configuration Release --runtime win-arm64 --self-contained true "-p:PublishAot=true;InvariantGlobalization=true;UseSystemResourceKeys=true;IlcOptimizationPreference=Size;IlcGenerateStackTraceData=false;DebuggerSupport=false;EnableUnsafeBinaryFormatterSerialization=false;EventSourceSupport=false;HttpActivityPropagationSupport=false;MetadataUpdaterSupport=false"
