@@ -33,4 +33,4 @@ Set-ExecutionPolicy Unrestricted
 ## License
 The contents are freely available under the [GPL-2.0](http://opensource.org/licenses/GPL-2.0).
 
-The licenses of third-party libraries can be found [here](https://github.com/project-toybox/toybox-image-conversion-server/blob/main/docs/THIRD_PARTY_NOTICES.md).
+The licenses of third-party libraries can be found [here](https://github.com/project-toybox/toybox-image-converter/blob/main/docs/THIRD_PARTY_NOTICES.md).
