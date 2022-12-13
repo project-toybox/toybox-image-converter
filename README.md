@@ -1,16 +1,14 @@
-<p align="right">
-<a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/project-toybox/toybox-image-converter/Release"></a>
-<a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/releases/latest"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/project-toybox/toybox-image-converter"></a>
-<a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-image-converter"></a>
-</p>
-
 <p align="center">
     <h1 align="center">
         <img src="https://raw.githubusercontent.com/project-toybox/toybox-assets/main/images/toybox-icon.png" width="50" height="50">
         <p>Toybox Image Converter</p>
     </h1>
-    <p align="center">An image format converter for Toybox</p>
-    <br>
+    <p align="center"><b>An image format converter for Toybox</b></p>
+    <p align="center">
+        <a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/project-toybox/toybox-image-converter/Release"></a>
+        <a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/releases/latest"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/project-toybox/toybox-image-converter"></a>
+        <a target="_blank" href="https://github.com/project-toybox/toybox-image-converter/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/project-toybox/toybox-image-converter"></a>
+    </p>
 </p>
 
 ## Usage
