@@ -12,7 +12,7 @@
 </p>
 
 ## Usage
-[View the documentation](README.md) for usage information.
+[See the documentaion](README.md) for instructions on how to use it.
 
 ## Build
 ### Requirements
