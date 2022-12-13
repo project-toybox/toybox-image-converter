@@ -104,9 +104,9 @@ function Invoke-Restore {
 
 function Invoke-Publish {
 	if ($excludeSymbols -eq $true) {
-        dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:DebugType=None -p:DebugSymbols=false -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
+        dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:Configuration=Release -p:DebugType=None -p:DebugSymbols=false -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
     } else {
-		dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
+		dotnet publish $Script:TargetPath -p:PublishProfileFullPath=$Script:ProfilePath -p:Configuration=Release -p:Product=$productName -p:Version=$productVersion -p:AssemblyTitle=$fileDesc -p:AssemblyVersion=$fileVersion -p:Company=$company -p:Copyright=$copyright $properties --verbosity $verbosity --no-restore --nologo
 	}
 
     if ($lastExitCode -ne 0) {
