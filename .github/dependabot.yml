@@ -12,8 +12,6 @@ updates:
     directory: "src/ToyboxImageConverter/"
     schedule:
       interval: "daily"
-    labels:
-      - "NuGet"
 
   # Maintain dependencies for nuget
   - package-ecosystem: "nuget"
@@ -21,5 +19,3 @@ updates:
     directory: "src/ToyboxImageConverter.Tests/"
     schedule:
       interval: "daily"
-    labels:
-      - "NuGet"
