@@ -64,8 +64,8 @@ jobs:
         
       - name: Compress build outputs
         run: |
-          Compress-Archive -Path ./src/ToyboxImageConverter/publish/x64/* -DestinationPath ./x64.zip -Force
-          Compress-Archive -Path ./src/ToyboxImageConverter/publish/arm64/* -DestinationPath ./arm64.zip -Force
+          Compress-Archive -Path ./src/ToyboxImageConverter/bin/publish/x64/* -DestinationPath ./x64.zip -Force
+          Compress-Archive -Path ./src/ToyboxImageConverter/bin/publish/arm64/* -DestinationPath ./arm64.zip -Force
         shell: pwsh
         
       - name: Upload build outputs
