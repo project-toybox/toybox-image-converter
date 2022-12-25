@@ -64,10 +64,10 @@ jobs:
         
       - name: Copy licenses
         run: |
-          Copy-Item "./docs/LICENSE.md" -Destination ./src/ToyboxImageConverter/bin/publish/x64
-          Copy-Item "./docs/LICENSE.md" -Destination ./src/ToyboxImageConverter/bin/publish/arm64
-          Copy-Item "./docs/THIRD_PARTY_NOTICES.md" -Destination ./src/ToyboxImageConverter/bin/publish/x64
-          Copy-Item "./docs/THIRD_PARTY_NOTICES.md" -Destination ./src/ToyboxImageConverter/bin/publish/arm64
+          New-Item -Path "./src/ToyboxImageConverter/bin/publish/x64" -Name "docs" -ItemType "directory"
+          New-Item -Path "./src/ToyboxImageConverter/bin/publish/arm64" -Name "docs" -ItemType "directory"
+          Copy-Item -Path "./docs/*" -Destination "./src/ToyboxImageConverter/bin/publish/x64/docs"
+          Copy-Item -Path "./docs/*" -Destination "./src/ToyboxImageConverter/bin/publish/arm64/docs"
         shell: pwsh
         
       - name: Compress build outputs
