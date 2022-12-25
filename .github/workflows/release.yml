@@ -76,6 +76,27 @@ jobs:
           Compress-Archive -Path ./src/ToyboxImageConverter/bin/publish/arm64/* -DestinationPath ./arm64.zip -Force
         shell: pwsh
         
+      - name: Download VIPS
+        uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "project-toybox/toybox-vips"
+          latest: true
+          fileName: "*.zip"
+          
+      - name: Decompress VIPS
+        run: |
+          New-Item -Path "./" -Name "vips-x64" -ItemType "directory"
+          New-Item -Path "./" -Name "vips-arm64" -ItemType "directory"
+          Expand-Archive -Path "./vips-dev-w64-all-*-hevc.zip" -DestinationPath "./src/ToyboxImageConverter/bin/publish/x64"
+          Expand-Archive -Path "./vips-dev-arm64-all-*-hevc.zip" -DestinationPath "./src/ToyboxImageConverter/bin/publish/arm64"
+        shell: pwsh
+        
+      - name: Compress build outputs with VIPS
+        run: |
+          Compress-Archive -Path ./src/ToyboxImageConverter/bin/publish/x64/* -DestinationPath ./x64-with-vips.zip -Force
+          Compress-Archive -Path ./src/ToyboxImageConverter/bin/publish/arm64/* -DestinationPath ./arm64-with-vips.zip -Force
+        shell: pwsh   
+        
       - name: Upload build outputs
         uses: actions/upload-artifact@v3
         with:
@@ -83,6 +104,8 @@ jobs:
           path: |
             ./x64.zip
             ./arm64.zip
+            ./x64-with-vips.zip
+            ./arm64-with-vips.zip
             
   
   release:
@@ -126,4 +149,24 @@ jobs:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./arm64.zip
           asset_name: toybox-image-converter-arm64-${{ inputs.file-version }}.zip
+          asset_content_type: application/zip
+          
+      - name: Upload the x64(with VIPS) build output
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./x64-with-vips.zip
+          asset_name: toybox-image-converter-with-vips-w64-${{ inputs.file-version }}.zip
+          asset_content_type: application/zip
+          
+      - name: Upload the ARM64(with VIPS) build output
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./arm64-with-vips.zip
+          asset_name: toybox-image-converter-with-vips-arm64-${{ inputs.file-version }}.zip
           asset_content_type: application/zip
