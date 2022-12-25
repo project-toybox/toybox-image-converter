@@ -62,6 +62,14 @@ jobs:
           ./scripts/publish.ps1 -target ToyboxImageConverter/ToyboxImageConverter.csproj -publishprofile arm64.pubxml -productName "${{ inputs.product-name }}" -productVersion "${{ inputs.product-version }}" -fileDesc "${{ inputs.file-desc }}" -fileVersion "${{ inputs.file-version }}" -company "${{ inputs.company }}" -copyright "${{ inputs.copyright }}" -excludeSymbols $${{ inputs.remove-debug-symbols }}
         shell: pwsh
         
+      - name: Copy licenses
+        run: |
+          Copy-Item "./docs/LICENSE.md" -Destination ./src/ToyboxImageConverter/bin/publish/x64
+          Copy-Item "./docs/LICENSE.md" -Destination ./src/ToyboxImageConverter/bin/publish/arm64
+          Copy-Item "./docs/THIRD_PARTY_NOTICES.md" -Destination ./src/ToyboxImageConverter/bin/publish/x64
+          Copy-Item "./docs/THIRD_PARTY_NOTICES.md" -Destination ./src/ToyboxImageConverter/bin/publish/arm64
+        shell: pwsh
+        
       - name: Compress build outputs
         run: |
           Compress-Archive -Path ./src/ToyboxImageConverter/bin/publish/x64/* -DestinationPath ./x64.zip -Force
