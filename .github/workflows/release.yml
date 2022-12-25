@@ -83,12 +83,14 @@ jobs:
           latest: true
           fileName: "*.zip"
           
-      - name: Decompress VIPS
+      - name: Decompress and copy VIPS
         run: |
           New-Item -Path "./" -Name "vips-x64" -ItemType "directory"
           New-Item -Path "./" -Name "vips-arm64" -ItemType "directory"
-          Expand-Archive -Path "./vips-dev-w64-all-*-hevc.zip" -DestinationPath "./src/ToyboxImageConverter/bin/publish/x64"
-          Expand-Archive -Path "./vips-dev-arm64-all-*-hevc.zip" -DestinationPath "./src/ToyboxImageConverter/bin/publish/arm64"
+          Expand-Archive -Path "./vips-dev-w64-all-*-hevc.zip" -DestinationPath "./vips-x64"
+          Expand-Archive -Path "./vips-dev-arm64-all-*-hevc.zip" -DestinationPath "./vips-arm64"
+          Copy-Item -Path "./vips-x64/bin/*" -Destination "./src/ToyboxImageConverter/bin/publish/x64/" -Recurse
+          Copy-Item -Path "./vips-arm64/bin/*" -Destination "./src/ToyboxImageConverter/bin/publish/arm64/" -Recurse
         shell: pwsh
         
       - name: Compress build outputs with VIPS
